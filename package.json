@@ -1,0 +1,13 @@
+{
+  "name": "maa-shakuntala-computer-classes",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Website + backend APIs for Maa Shakuntala Computer Classes",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
