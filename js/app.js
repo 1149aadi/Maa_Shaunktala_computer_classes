@@ -88,42 +88,67 @@ document.addEventListener('DOMContentLoaded', () => {
   // ---- ADMISSION FORM ----
   const admissionForm = document.getElementById('admissionForm');
   if (admissionForm) {
-    admissionForm.addEventListener('submit', (e) => {
+    admissionForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const btn = admissionForm.querySelector('.form-submit');
       const success = document.getElementById('formSuccess');
       btn.textContent = '⏳ Submitting...';
       btn.disabled = true;
-      // Simulate submit (replace with actual PHP backend call)
-      setTimeout(() => {
-        btn.textContent = '📝 Submit Registration — It\'s Free!';
+
+      try {
+        const formData = new FormData(admissionForm);
+        const payload = Object.fromEntries(formData.entries());
+        const resp = await fetch('/api/admissions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (!resp.ok) throw new Error('Unable to submit form');
+        btn.textContent = '📝 Submit Registration — It's Free!';
         btn.disabled = false;
         if (success) {
           success.classList.add('show');
           admissionForm.reset();
           success.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
-      }, 1500);
+      } catch (err) {
+        btn.textContent = '❌ Try Again';
+        btn.disabled = false;
+      }
     });
   }
 
   // ---- CONTACT FORM ----
   const contactForm = document.getElementById('contactForm');
   if (contactForm) {
-    contactForm.addEventListener('submit', (e) => {
+    contactForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const btn = contactForm.querySelector('.form-submit');
       const success = document.getElementById('contactSuccess');
       btn.textContent = '⏳ Sending...';
       btn.disabled = true;
-      setTimeout(() => {
+
+      try {
+        const formData = new FormData(contactForm);
+        const payload = Object.fromEntries(formData.entries());
+        const resp = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (!resp.ok) throw new Error('Unable to send message');
         btn.textContent = '📨 Send Message';
         btn.disabled = false;
         if (success) {
           success.classList.add('show');
           contactForm.reset();
         }
-      }, 1500);
+      } catch (err) {
+        btn.textContent = '❌ Try Again';
+        btn.disabled = false;
+      }
     });
   }
 
