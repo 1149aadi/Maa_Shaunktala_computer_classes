@@ -14,7 +14,26 @@ if (!fs.existsSync(contactsFile)) fs.writeFileSync(contactsFile, '[]', 'utf-8');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(__dirname));
+
+// Serve only public-facing static assets/routes; do not expose project root files.
+app.use('/css', express.static(path.join(__dirname, 'css')));
+app.use('/js', express.static(path.join(__dirname, 'js')));
+
+app.get('/', (_, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+app.get('/about', (_, res) => {
+  res.sendFile(path.join(__dirname, 'about.html'));
+});
+
+app.get('/courses', (_, res) => {
+  res.sendFile(path.join(__dirname, 'courses.html'));
+});
+
+app.get('/contact', (_, res) => {
+  res.sendFile(path.join(__dirname, 'contact.html'));
+});
 
 function appendRecord(filePath, payload) {
   const existing = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
